@@ -108,7 +108,8 @@ function processReviews(
         count++
     }
     if (count == 2) {
-      isApproved = true
+      core.info(`there are 2 approvals:`)
+      isApproved = false
       break
     }
   }
