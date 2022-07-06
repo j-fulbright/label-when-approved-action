@@ -108,7 +108,7 @@ function processReviews(
         count = count + 1;
     }
     if (count == 2) {
-      isApproved = true
+      isApproved = false
       break
     }
   }
