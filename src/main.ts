@@ -105,7 +105,6 @@ function processReviews(
   var count = 0;
   for (const user in reviewStates) {
     if (reviewStates[user] === 'APPROVED') {
-        return isApproved
         count = count + 1;
     }
     if (count == 2) {
