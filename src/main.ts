@@ -102,13 +102,12 @@ function processReviews(
     core.info(`\t${user}: ${reviewStates[user].toLowerCase()}`)
   }
     
-  var count = 0;
+  var count:number = 0;
   for (const user in reviewStates) {
     if (reviewStates[user] === 'APPROVED') {
         count = count + 1;
     }
     if (count == 2) {
-      isApproved = true
       break
     }
   }
