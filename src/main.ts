@@ -105,9 +105,10 @@ function processReviews(
   var count:number = 0;
   for (const user in reviewStates) {
     if (reviewStates[user] === 'APPROVED') {
-        count = count + 1;
+        count++
     }
     if (count == 2) {
+      core.info(`two approved:`)
       break
     }
   }
