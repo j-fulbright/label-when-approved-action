@@ -172,10 +172,16 @@ async function run() {
     const labelNames = pullRequest.labels.map((label) => label.name);
 
     // Get the reviews
-    const { reviews, committers } = getReviews(octokit, owner, repo, pullRequest.number, requireCommittersApproval);
+    const { reviews, committers } = await getReviews(
+      octokit,
+      owner,
+      repo,
+      pullRequest.number,
+      requireCommittersApproval
+    );
 
     // Check if the PR is approved
-    const isApproved = processReviews(reviews, committers, requireCommittersApproval, numOfApprovals);
+    const isApproved = await processReviews(reviews, committers, requireCommittersApproval, numOfApprovals);
 
     // Add or remove the label
     let shouldLabelBeSet = false;
