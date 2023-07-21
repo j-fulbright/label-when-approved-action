@@ -1,4 +1,4 @@
-name: "Set Label When Approved"
+name: "Set Label When Approved (2023)"
 description: "Set label when PR is approved."
 author: "JFulbright"
 inputs:
