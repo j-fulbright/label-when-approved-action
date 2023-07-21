@@ -1,0 +1,22 @@
+name: Label when approved
+
+on: [workflow_dispatch]
+
+jobs:
+  label-when-approved:
+    name: "Update label when approved or unapproved"
+    runs-on: ubuntu-latest
+    outputs:
+      isApprovedByCommiters: ${{ steps.label-when-approved-by-commiters.outputs.isApproved }}
+      isApprovedByAnyone: ${{ steps.label-when-approved-by-anyone.outputs.isApproved }}
+    steps:
+      - name: Label when approved by developers
+        uses: ./
+        id: label-when-approved-by-developers
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          label: "approved"
+          require_committers_approval: "true"
+          remove_label_when_approval_missing: "true"
+          comment: "PR approved by 2 developers, ready to merge"
+          numOfApprovals: 2
