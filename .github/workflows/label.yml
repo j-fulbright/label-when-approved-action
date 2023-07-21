@@ -10,6 +10,8 @@ jobs:
       isApprovedByCommiters: ${{ steps.label-when-approved-by-commiters.outputs.isApproved }}
       isApprovedByAnyone: ${{ steps.label-when-approved-by-anyone.outputs.isApproved }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Label when approved by developers
         uses: ./
         id: label-when-approved-by-developers
@@ -18,6 +20,6 @@ jobs:
           label: "approved"
           require_committers_approval: "true"
           remove_label_when_approval_missing: "true"
-          comment: "PR approved by 2 developers, ready to merge"
-          numOfApprovals: 2
-          pullRequestNumber: 3
+          comment: "PR approved by developers, ready to merge"
+          numOfApprovals: 1
+          pullRequestNumber: 4
