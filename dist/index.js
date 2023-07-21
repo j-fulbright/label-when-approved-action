@@ -9901,7 +9901,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
     }
   }
 
-  return { reviews, reviewers, committers };
+  return { reviews, committers };
 }
 
 async function run() {
@@ -9928,8 +9928,8 @@ async function run() {
         `label: "${userLabel}"\n` +
         `requireCommittersApproval: ${requireCommittersApproval}\n` +
         `comment: ${comment}\n` +
-        `pullRequestNumber: ${pullRequestNumberInput}` +
-        `numOfApprovals: ${numOfApprovals}`
+        `pullRequestNumber: ${pullRequestNumberInput}\n` +
+        `numOfApprovals: ${numOfApprovals}\n`
     );
 
     // Workflow event setup
@@ -9938,7 +9938,7 @@ async function run() {
       if (pullRequestNumber === undefined) {
         throw Error('Could not find PR number from context, exiting');
       }
-    } else if (eventName === 'workflow_run') {
+    } else if (eventName === 'workflow_run' || eventName === 'workflow_dispatch') {
       if (pullRequestNumberInput === 'not set') {
         core.warning(
           `If action is triggered by "workflow_run" then input "pullRequestNumber" is required.\n` +
@@ -9966,13 +9966,7 @@ async function run() {
     const labelNames = pullRequest.labels.map((label) => label.name);
 
     // Get the reviews
-    const { reviews, reviewers, committers } = getReviews(
-      octokit,
-      owner,
-      repo,
-      pullRequest.number,
-      requireCommittersApproval
-    );
+    const { reviews, committers } = getReviews(octokit, owner, repo, pullRequest.number, requireCommittersApproval);
 
     // Check if the PR is approved
     const isApproved = processReviews(reviews, committers, requireCommittersApproval, numOfApprovals);
