@@ -11,7 +11,7 @@ function getRequiredEnv(key) {
 }
 
 function verboseOutput(name, value) {
-  core.info(`Setting output: ${name}: ${value}`);
+  core.info(`Setting output: ${name}: ${value}\n`);
   core.setOutput(name, value);
 }
 
@@ -84,8 +84,6 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
     repo,
     pull_number: pullRequestNumber
   });
-  core.info(`Review: ${reviews.length}`);
-
   const reviewers = reviews && reviews.length > 0 ? reviews.data.map((review) => review.user.login) : [];
   const reviewersAlreadyChecked = [];
   const committers = [];
@@ -204,8 +202,8 @@ async function run() {
 
     // Set outputs
     verboseOutput('isApproved', String(isApproved));
-    verboseOutput('labelSet', String(isLabelShouldBeSet));
-    verboseOutput('labelRemoved', String(isLabelShouldBeRemoved));
+    verboseOutput('labelSet', String(shouldLabelBeSet));
+    verboseOutput('labelRemoved', String(shouldLabelBeRemoved));
   } catch (error) {
     core.setFailed(error.message);
   }
