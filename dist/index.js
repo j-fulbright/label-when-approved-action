@@ -9795,6 +9795,15 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
+function getRequiredEnv(key) {
+  const value = process.env[key];
+  if (value === undefined) {
+    const message = `${key} was not defined.`;
+    throw new Error(message);
+  }
+  return value;
+}
+
 function verboseOutput(name, value) {
   core.info(`Setting output: ${name}: ${value}`);
   core.setOutput(name, value);
