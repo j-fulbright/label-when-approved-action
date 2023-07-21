@@ -144,7 +144,7 @@ async function run() {
       if (pullRequestNumber === undefined) {
         throw Error('Could not find PR number from context, exiting');
       }
-    } else if (eventName === 'workflow_run') {
+    } else if (eventName === 'workflow_run' || eventName === 'workflow_dispatch') {
       if (pullRequestNumberInput === 'not set') {
         core.warning(
           `If action is triggered by "workflow_run" then input "pullRequestNumber" is required.\n` +
