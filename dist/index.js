@@ -9878,7 +9878,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
     repo,
     pull_number: pullRequestNumber
   });
-  const reviewers = reviews && reviews.length > 0 ? reviews.data.map((review) => review.user.login) : [];
+  const reviewers = reviews && reviews.length > 0 ? reviews.map((review) => review.user.login) : [];
   const reviewersAlreadyChecked = [];
   const committers = [];
 
@@ -9963,9 +9963,11 @@ async function run() {
     });
 
     // Get the labels
+    core.info('Grabbing labels');
     const labelNames = pullRequest.labels.map((label) => label.name);
 
     // Get the reviews
+    core.info('Grabbing reviews');
     const { reviews, committers } = await getReviews(
       octokit,
       owner,
