@@ -84,7 +84,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
     repo,
     pull_number: pullRequestNumber
   });
-  const reviewers = reviews && reviews.length > 0 ? reviews.data.map((review) => review.user.login) : [];
+  const reviewers = reviews && reviews.length > 0 ? reviews.map((review) => review.user.login) : [];
   const reviewersAlreadyChecked = [];
   const committers = [];
 
