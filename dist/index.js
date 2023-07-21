@@ -9873,14 +9873,14 @@ async function processReviews(reviews, committers, requireCommittersApproval, nu
 }
 
 async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommittersApproval) {
-  const reviews = await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews', {
+  const { data: reviews } = await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews', {
     owner,
     repo,
     pull_number: pullRequestNumber
   });
-  core.info(`Review: ${reviews.data.length}`);
+  core.info(`Review: ${reviews.length}`);
 
-  const reviewers = reviews ? reviews.map((review) => review.user.login) : [];
+  const reviewers = reviews && reviews.length > 0 ? reviews.data.map((review) => review.user.login) : [];
   const reviewersAlreadyChecked = [];
   const committers = [];
 
