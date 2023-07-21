@@ -169,9 +169,11 @@ async function run() {
     });
 
     // Get the labels
+    core.info('Grabbing labels');
     const labelNames = pullRequest.labels.map((label) => label.name);
 
     // Get the reviews
+    core.info('Grabbing reviews');
     const { reviews, committers } = await getReviews(
       octokit,
       owner,
