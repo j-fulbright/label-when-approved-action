@@ -9878,9 +9878,9 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
     repo,
     pull_number: pullRequestNumber
   });
-  reviews.forEach((review) => {
-    core.info(`Review: ${review}`);
-  });
+  for (let [key, value] of Object.entries(reviews)) {
+    core.info(`Review: ${key}: ${value}`);
+  }
   const reviewers = reviews ? reviews.map((review) => review.user.login) : [];
   const reviewersAlreadyChecked = [];
   const committers = [];
