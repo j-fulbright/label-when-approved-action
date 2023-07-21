@@ -134,8 +134,8 @@ async function run() {
         `label: "${userLabel}"\n` +
         `requireCommittersApproval: ${requireCommittersApproval}\n` +
         `comment: ${comment}\n` +
-        `pullRequestNumber: ${pullRequestNumberInput}` +
-        `numOfApprovals: ${numOfApprovals}`
+        `pullRequestNumber: ${pullRequestNumberInput}\n` +
+        `numOfApprovals: ${numOfApprovals}\n`
     );
 
     // Workflow event setup
