@@ -214,8 +214,8 @@ async function run() {
 
     // Set outputs
     verboseOutput('isApproved', String(isApproved));
-    verboseOutput('labelSet', String(shouldLabelBeSet));
-    verboseOutput('labelRemoved', String(shouldLabelBeRemoved));
+    verboseOutput('shouldLabelBeSet', String(shouldLabelBeSet));
+    verboseOutput('shouldLabelBeRemoved', String(shouldLabelBeRemoved));
   } catch (error) {
     setFailed(error.message);
   }

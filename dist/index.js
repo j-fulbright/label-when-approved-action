@@ -10054,8 +10054,8 @@ async function run() {
 
     // Set outputs
     verboseOutput('isApproved', String(isApproved));
-    verboseOutput('labelSet', String(shouldLabelBeSet));
-    verboseOutput('labelRemoved', String(shouldLabelBeRemoved));
+    verboseOutput('shouldLabelBeSet', String(shouldLabelBeSet));
+    verboseOutput('shouldLabelBeRemoved', String(shouldLabelBeRemoved));
   } catch (error) {
     (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
   }
