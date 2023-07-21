@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import { info, setOutput, getInput, warning, setFailed } from '@actions/core';
+import { getOctokit, context as _context } from '@actions/github';
 
 function getRequiredEnv(key) {
   const value = process.env[key];
@@ -11,12 +11,12 @@ function getRequiredEnv(key) {
 }
 
 function verboseOutput(name, value) {
-  core.info(`Setting output: ${name}: ${value}\n`);
-  core.setOutput(name, value);
+  info(`Setting output: ${name}: ${value}`);
+  setOutput(name, value);
 }
 
 async function setLabel(octokit, owner, repo, pullRequestNumber, label) {
-  core.info(`Setting label "${label}"`);
+  info(`Setting label "${label}"`);
   await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
     owner,
     repo,
@@ -26,7 +26,7 @@ async function setLabel(octokit, owner, repo, pullRequestNumber, label) {
 }
 
 async function removeLabel(octokit, owner, repo, pullRequestNumber, label) {
-  core.info(`Removing label "${label}"`);
+  info(`Removing label "${label}"`);
   await octokit.request('DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}', {
     owner,
     repo,
@@ -51,9 +51,9 @@ async function processReviews(reviews, committers, requireCommittersApproval, nu
     }
   }
 
-  core.info('Reviews:');
+  info('Reviews:');
   for (const user in reviewStates) {
-    core.info(`\t${user}: ${reviewStates[user].toLowerCase()}`);
+    info(`\t${user}: ${reviewStates[user].toLowerCase()}`);
   }
 
   for (const user in reviewStates) {
@@ -89,7 +89,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
   const committers = [];
 
   if (requireCommittersApproval) {
-    core.info('Checking reviewers permissions');
+    info(`\nChecking reviewers permissions`);
     for (const reviewer of reviewers) {
       if (!reviewersAlreadyChecked.includes(reviewer)) {
         const r = await octokit.request('GET /repos/{owner}/{repo}/collaborators/{username}/permission', {
@@ -101,7 +101,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
         if (r.data.permission === 'admin' || r.data.permission === 'write') {
           committers.push(reviewer);
         }
-        core.info(`\t${reviewer}: ${r.data.permission}`);
+        info(`\t${reviewer}: ${r.data.permission}`);
         reviewersAlreadyChecked.push(reviewer);
       }
     }
@@ -111,16 +111,16 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
 }
 
 async function run() {
-  const token = core.getInput('token', { required: true });
-  const userLabel = core.getInput('label') || 'not set';
-  const requireCommittersApproval = core.getInput('require_committers_approval') === 'true';
-  const removeLabelWhenApprovalMissing = core.getInput('remove_label_when_approval_missing') === 'true';
-  const comment = core.getInput('comment') || '';
-  const pullRequestNumberInput = core.getInput('pullRequestNumber') || 'not set';
-  const numOfApprovals = parseInt(core.getInput('numOfApprovals') || 1);
+  const token = getInput('token', { required: true });
+  const userLabel = getInput('label') || 'not set';
+  const requireCommittersApproval = getInput('require_committers_approval') === 'true';
+  const removeLabelWhenApprovalMissing = getInput('remove_label_when_approval_missing') === 'true';
+  const comment = getInput('comment') || '';
+  const pullRequestNumberInput = getInput('pullRequestNumber') || 'not set';
+  const numOfApprovals = parseInt(getInput('numOfApprovals') || 1);
 
-  const octokit = github.getOctokit(token);
-  const context = github.context;
+  const octokit = getOctokit(token);
+  const context = _context;
   const repository = getRequiredEnv('GITHUB_REPOSITORY');
   const eventName = getRequiredEnv('GITHUB_EVENT_NAME');
   const [owner, repo] = repository.split('/');
@@ -129,7 +129,7 @@ async function run() {
 
   //
   try {
-    core.info(
+    info(
       `\n############### Set Label When Approved Begin ##################\n` +
         `label: "${userLabel}"\n` +
         `requireCommittersApproval: ${requireCommittersApproval}\n` +
@@ -146,7 +146,7 @@ async function run() {
       }
     } else if (eventName === 'workflow_run' || eventName === 'workflow_dispatch') {
       if (pullRequestNumberInput === 'not set') {
-        core.warning(
+        warning(
           `If action is triggered by "workflow_run" then input "pullRequestNumber" is required.\n` +
             `It might be missing because the pull request might have been already merged or a fixup pushed to` +
             `the PR branch. None of the outputs will be set as we cannot find the right PR.`
@@ -169,11 +169,11 @@ async function run() {
     });
 
     // Get the labels
-    core.info('Grabbing labels');
+    info('Grabbing labels');
     const labelNames = pullRequest.labels.map((label) => label.name);
 
     // Get the reviews
-    core.info('Grabbing reviews');
+    info('Grabbing reviews');
     const { reviews, committers } = await getReviews(
       octokit,
       owner,
@@ -207,10 +207,10 @@ async function run() {
     verboseOutput('labelSet', String(shouldLabelBeSet));
     verboseOutput('labelRemoved', String(shouldLabelBeRemoved));
   } catch (error) {
-    core.setFailed(error.message);
+    setFailed(error.message);
   }
 }
 
 run()
-  .then(() => core.info('\n############### Set Label When Approved End ##################\n'))
-  .catch((e) => core.setFailed(e.message));
+  .then(() => info('\n############### Set Label When Approved End ##################\n'))
+  .catch((e) => setFailed(e.message));

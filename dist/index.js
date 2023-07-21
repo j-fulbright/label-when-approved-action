@@ -9784,16 +9784,62 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
-const core = __nccwpck_require__(2186);
-const github = __nccwpck_require__(5438);
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5438);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+
+
 
 function getRequiredEnv(key) {
   const value = process.env[key];
@@ -9805,12 +9851,12 @@ function getRequiredEnv(key) {
 }
 
 function verboseOutput(name, value) {
-  core.info(`Setting output: ${name}: ${value}\n`);
-  core.setOutput(name, value);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`Setting output: ${name}: ${value}`);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)(name, value);
 }
 
 async function setLabel(octokit, owner, repo, pullRequestNumber, label) {
-  core.info(`Setting label "${label}"`);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`Setting label "${label}"`);
   await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
     owner,
     repo,
@@ -9820,7 +9866,7 @@ async function setLabel(octokit, owner, repo, pullRequestNumber, label) {
 }
 
 async function removeLabel(octokit, owner, repo, pullRequestNumber, label) {
-  core.info(`Removing label "${label}"`);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`Removing label "${label}"`);
   await octokit.request('DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}', {
     owner,
     repo,
@@ -9845,9 +9891,9 @@ async function processReviews(reviews, committers, requireCommittersApproval, nu
     }
   }
 
-  core.info('Reviews:');
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)('Reviews:');
   for (const user in reviewStates) {
-    core.info(`\t${user}: ${reviewStates[user].toLowerCase()}`);
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`\t${user}: ${reviewStates[user].toLowerCase()}`);
   }
 
   for (const user in reviewStates) {
@@ -9883,7 +9929,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
   const committers = [];
 
   if (requireCommittersApproval) {
-    core.info('Checking reviewers permissions');
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`\nChecking reviewers permissions`);
     for (const reviewer of reviewers) {
       if (!reviewersAlreadyChecked.includes(reviewer)) {
         const r = await octokit.request('GET /repos/{owner}/{repo}/collaborators/{username}/permission', {
@@ -9895,7 +9941,7 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
         if (r.data.permission === 'admin' || r.data.permission === 'write') {
           committers.push(reviewer);
         }
-        core.info(`\t${reviewer}: ${r.data.permission}`);
+        (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`\t${reviewer}: ${r.data.permission}`);
         reviewersAlreadyChecked.push(reviewer);
       }
     }
@@ -9905,16 +9951,16 @@ async function getReviews(octokit, owner, repo, pullRequestNumber, requireCommit
 }
 
 async function run() {
-  const token = core.getInput('token', { required: true });
-  const userLabel = core.getInput('label') || 'not set';
-  const requireCommittersApproval = core.getInput('require_committers_approval') === 'true';
-  const removeLabelWhenApprovalMissing = core.getInput('remove_label_when_approval_missing') === 'true';
-  const comment = core.getInput('comment') || '';
-  const pullRequestNumberInput = core.getInput('pullRequestNumber') || 'not set';
-  const numOfApprovals = parseInt(core.getInput('numOfApprovals') || 1);
+  const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('token', { required: true });
+  const userLabel = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('label') || 'not set';
+  const requireCommittersApproval = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('require_committers_approval') === 'true';
+  const removeLabelWhenApprovalMissing = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('remove_label_when_approval_missing') === 'true';
+  const comment = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('comment') || '';
+  const pullRequestNumberInput = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('pullRequestNumber') || 'not set';
+  const numOfApprovals = parseInt((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('numOfApprovals') || 1);
 
-  const octokit = github.getOctokit(token);
-  const context = github.context;
+  const octokit = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
+  const context = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
   const repository = getRequiredEnv('GITHUB_REPOSITORY');
   const eventName = getRequiredEnv('GITHUB_EVENT_NAME');
   const [owner, repo] = repository.split('/');
@@ -9923,7 +9969,7 @@ async function run() {
 
   //
   try {
-    core.info(
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(
       `\n############### Set Label When Approved Begin ##################\n` +
         `label: "${userLabel}"\n` +
         `requireCommittersApproval: ${requireCommittersApproval}\n` +
@@ -9940,7 +9986,7 @@ async function run() {
       }
     } else if (eventName === 'workflow_run' || eventName === 'workflow_dispatch') {
       if (pullRequestNumberInput === 'not set') {
-        core.warning(
+        (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.warning)(
           `If action is triggered by "workflow_run" then input "pullRequestNumber" is required.\n` +
             `It might be missing because the pull request might have been already merged or a fixup pushed to` +
             `the PR branch. None of the outputs will be set as we cannot find the right PR.`
@@ -9963,11 +10009,11 @@ async function run() {
     });
 
     // Get the labels
-    core.info('Grabbing labels');
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)('Grabbing labels');
     const labelNames = pullRequest.labels.map((label) => label.name);
 
     // Get the reviews
-    core.info('Grabbing reviews');
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)('Grabbing reviews');
     const { reviews, committers } = await getReviews(
       octokit,
       owner,
@@ -10001,13 +10047,13 @@ async function run() {
     verboseOutput('labelSet', String(shouldLabelBeSet));
     verboseOutput('labelRemoved', String(shouldLabelBeRemoved));
   } catch (error) {
-    core.setFailed(error.message);
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
   }
 }
 
 run()
-  .then(() => core.info('\n############### Set Label When Approved End ##################\n'))
-  .catch((e) => core.setFailed(e.message));
+  .then(() => (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)('\n############### Set Label When Approved End ##################\n'))
+  .catch((e) => (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(e.message));
 
 })();
 
