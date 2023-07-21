@@ -20,6 +20,6 @@ jobs:
           label: "approved"
           require_committers_approval: "true"
           remove_label_when_approval_missing: "true"
-          comment: "PR approved by 2 developers, ready to merge"
+          comment: "PR approved by developers, ready to merge"
           numOfApprovals: 1
           pullRequestNumber: 4
