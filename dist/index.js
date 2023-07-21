@@ -9865,6 +9865,16 @@ async function setLabel(octokit, owner, repo, pullRequestNumber, label) {
   });
 }
 
+async function addComment(octokit, owner, repo, pullRequestNumber, comment) {
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`Adding comment "${comment}"`);
+  await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+    owner,
+    repo,
+    issue_number: pullRequestNumber,
+    body: comment
+  });
+}
+
 async function removeLabel(octokit, owner, repo, pullRequestNumber, label) {
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)(`Removing label "${label}"`);
   await octokit.request('DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}', {
